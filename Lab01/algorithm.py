@@ -1,11 +1,11 @@
-def hybrid_mergesort(arr, threshold=10):
+def hybrid_mergesort(arr, counter, threshold=10):
     """
     Hybrid sorting algorithm combining Merge Sort and Insertion Sort
     
     Args:
         arr: List of comparable elements to sort
         threshold: Size threshold below which to use insertion sort (default: 10)
-    
+        counter: number of comparisons
     Returns:
         Sorted array
     """
@@ -14,11 +14,11 @@ def hybrid_mergesort(arr, threshold=10):
     
     # Create a copy to avoid modifying the original array
     arr_copy = arr.copy()
-    _hybrid_mergesort_helper(arr_copy, 0, len(arr_copy) - 1, threshold)
+    _hybrid_mergesort_helper(arr_copy, 0, len(arr_copy) - 1, threshold, counter)
     return arr_copy
 
 
-def _hybrid_mergesort_helper(arr, left, right, threshold):
+def _hybrid_mergesort_helper(arr, left, right, threshold, counter):
     """
     Recursive helper function for hybrid mergesort
     
@@ -27,22 +27,23 @@ def _hybrid_mergesort_helper(arr, left, right, threshold):
         left: Starting index of subarray
         right: Ending index of subarray
         threshold: Size threshold for switching to insertion sort
+        counter: number of comparisons
     """
     if left < right:
         size = right - left + 1
         
         # If subarray size is small, use insertion sort
         if size <= threshold:
-            _insertion_sort(arr, left, right)
+            _insertion_sort(arr, left, right, counter)
         else:
             # Otherwise, use mergesort
             mid = left + (right - left) // 2
-            _hybrid_mergesort_helper(arr, left, mid, threshold)
-            _hybrid_mergesort_helper(arr, mid + 1, right, threshold)
-            _merge_sort(arr, left, mid, right)
+            _hybrid_mergesort_helper(arr, left, mid, threshold, counter)
+            _hybrid_mergesort_helper(arr, mid + 1, right, threshold, counter)
+            _merge_sort(arr, left, mid, right, counter)
 
 
-def _insertion_sort(arr, left, right):
+def _insertion_sort(arr, left, right, counter):
     """
     Insertion sort for a specific range of the array.
     
@@ -54,16 +55,18 @@ def _insertion_sort(arr, left, right):
     for i in range(left + 1, right + 1):
         key = arr[i]
         j = i - 1
-        
         # Move elements greater than key one position ahead
-        while j >= left and arr[j] > key:
-            arr[j + 1] = arr[j]
-            j -= 1
-        
+        while j>=left:
+            counter[0]+=1
+            if arr[j]>key:
+                arr[j+1]=key
+                j-=1
+            else:
+                break
         arr[j + 1] = key
 
 
-def _merge_sort(arr, left, mid, right):
+def _merge_sort(arr, left, mid, right, counter):
     """
     Merge two sorted subarrays arr[left:mid+1] and arr[mid+1:right+1].
     
@@ -82,6 +85,7 @@ def _merge_sort(arr, left, mid, right):
     k = left   # Initial index for merged array
     
     while i < len(left_arr) and j < len(right_arr):
+        counter[0]+=1
         if left_arr[i] <= right_arr[j]:
             arr[k] = left_arr[i]
             i += 1
@@ -119,10 +123,10 @@ if __name__ == "__main__":
             [3, 7, 1, 9, 4, 6, 2, 8, 5],
             [1, 3, 2, 4, 6, 5, 8, 7, 10, 9],
         ]
-        
+        counter = [0]
         for i, arr in enumerate(test_cases):
             original = arr.copy()
-            sorted_arr = hybrid_mergesort(arr)
+            sorted_arr = hybrid_mergesort(arr, counter)
             expected = sorted(original)
             
             print(f"Test {i+1}: {original}")
