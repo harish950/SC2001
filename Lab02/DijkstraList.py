@@ -28,3 +28,22 @@ def dijkstraList(graph, root):
                 heapq.heappush(minHeap, (distList[vertex], vertex))
 
     return distList, predecessorMap
+
+
+#Sample test
+def test_dijkstra_list():
+    graph = {
+        0: [(1, 10), (2, 5), (3, 3)],
+        1: [(0, 10), (3, 1)],
+        2: [(0, 5), (3, 2)],
+        3: [(0, 3), (1, 1), (2, 2), (4, 6)],
+        4: [(3, 6)]
+    }
+
+    root = 0
+    distList, predecessorMap = dijkstraList(graph, root)
+
+    print("Shortest distances from node", root, ":", distList)
+    print("Predecessors:", predecessorMap)
+
+test_dijkstra_list()

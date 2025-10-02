@@ -39,3 +39,23 @@ def dijkstraMatrix(graph, root):
                     predecessorMap[ver] = currentNode
 
     return distList, predecessorMap
+
+
+#Sample test
+def test_dijkstra():
+    graph = [
+        [0, 10, 5, 3, 0],
+        [10, 0, 0, 1, 0],
+        [5, 0, 0, 2, 0],
+        [3, 1, 2, 0, 6],
+        [0, 0, 0, 6, 0]
+    ]
+
+    root = 0
+    distList, predecessorMap = dijkstraMatrix(graph, root)
+
+    print("Shortest distances from node", root, ":", distList)
+    print("Predecessors:", predecessorMap)
+
+test_dijkstra()
+
